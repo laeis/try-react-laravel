@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     //
-    protected $filable = ['name', 'description'];
+    protected $fillable = ['name', 'description'];
 
     /**
      * 
