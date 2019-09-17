@@ -36,10 +36,11 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        $project = $project->with(['tasks' => function($q){
+       
+        $project = $project->load(['tasks' => function($q){
             $q->active();
         }]);
-
+        
         return $project->toJson();
     }
 

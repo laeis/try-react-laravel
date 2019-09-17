@@ -1,6 +1,8 @@
 
-    import axios from 'axios'
-    import React, { Component } from 'react'
+    import axios from 'axios';
+    import React, { Component } from 'react';
+    import TaskList from '../tasks/List';
+    import TaskForm from '../tasks/Form';
 
     class SingleProject extends Component {
       constructor (props) {
@@ -9,6 +11,22 @@
           project: {},
           tasks: []
         }
+        this.handleMarkProjectAsCompleted = this.handleMarkProjectAsCompleted.bind(this);
+        this.handlerAddNewTask = this.handlerAddNewTask.bind(this);
+      }
+
+
+      handleMarkProjectAsCompleted () {
+        const { history } = this.props
+
+        axios.put(`/api/projects/${this.state.project.id}`)
+          .then(response => history.push('/'))
+      }
+
+      handlerAddNewTask(tasks){
+        this.setState(prevState => ({
+          tasks: prevState.tasks.concat(tasks)
+        }))
       }
 
       componentDidMount () {
@@ -17,7 +35,7 @@
         axios.get(`/api/projects/${projectId}`).then(response => {
           this.setState({
             project: response.data,
-            tasks: response.data.tasks
+            tasks: response.data.tasks || []
           })
         })
       }
@@ -34,26 +52,18 @@
                   <div className='card-body'>
                     <p>{project.description}</p>
 
-                    <button className='btn btn-primary btn-sm'>
+                    <button 
+                      className='btn btn-primary btn-sm'
+                      onClick={this.handleMarkProjectAsCompleted}
+                    >
                       Mark as completed
                     </button>
 
                     <hr />
 
-                    <ul className='list-group mt-3'>
-                      {tasks.map(task => (
-                        <li
-                          className='list-group-item d-flex justify-content-between align-items-center'
-                          key={task.id}
-                        >
-                          {task.title}
-
-                          <button className='btn btn-primary btn-sm'>
-                            Mark as completed
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                    <TaskList data={tasks}/>
+                    <hr />
+                    <TaskForm project={project} addTaskToList={this.handlerAddNewTask}/>    
                   </div>
                 </div>
               </div>

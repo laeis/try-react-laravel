@@ -12,9 +12,10 @@ class TaskController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required',
+            'project_id' => 'required|exists:projects,id'
         ]);
-
-        $task = Task::create($request);
+            
+        $task = Task::create($validatedData);
 
         return $task->toJson();
     }
