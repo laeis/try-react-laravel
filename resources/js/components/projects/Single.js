@@ -13,6 +13,7 @@
         }
         this.handleMarkProjectAsCompleted = this.handleMarkProjectAsCompleted.bind(this);
         this.handlerAddNewTask = this.handlerAddNewTask.bind(this);
+        this.handleMarkTaskAsCompleted = this.handleMarkTaskAsCompleted.bind(this);
       }
 
 
@@ -26,6 +27,12 @@
       handlerAddNewTask(tasks){
         this.setState(prevState => ({
           tasks: prevState.tasks.concat(tasks)
+        }))
+      }
+
+      handleMarkTaskAsCompleted(taskId){
+        this.setState(prevState => ({
+          tasks: prevState.tasks.filter((item) => item.id !== taskId)
         }))
       }
 
@@ -61,7 +68,7 @@
 
                     <hr />
 
-                    <TaskList data={tasks}/>
+                    <TaskList data={tasks} taskAsCompletedState={this.handleMarkTaskAsCompleted}/>
                     <hr />
                     <TaskForm project={project} addTaskToList={this.handlerAddNewTask}/>    
                   </div>

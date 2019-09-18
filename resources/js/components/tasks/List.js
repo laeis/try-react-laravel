@@ -1,7 +1,16 @@
-
+import axios from 'axios';
 import React from 'react';
 
+function markTaskAsCompleted(props, taskId) {
+    axios.put(`/api/tasks/${taskId}`)
+    .then(response => props.taskAsCompletedState(taskId))
+    .catch(error => console.error(error.message))
+}
+
 function TasksList(props){
+
+   
+
     return( 
         <ul className='list-group mt-3'>
             {props.data.map(task => (
@@ -12,9 +21,10 @@ function TasksList(props){
                 {task.title}
 
                 <button 
-                className='btn btn-primary btn-sm'       
+                    className='btn btn-primary btn-sm'
+                    onClick={markTaskAsCompleted.bind(null, props, task.id)}       
                 >
-                Mark as completed
+                    Mark as completed
                 </button>
             </li>
             ))}
