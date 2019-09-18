@@ -9,7 +9,7 @@ class TaskController extends Controller
 {
     //
     public function store(Request $request)
-    {
+    {   
         $validatedData = $request->validate([
             'title' => 'required',
             'project_id' => 'required|exists:projects,id'
@@ -17,7 +17,7 @@ class TaskController extends Controller
             
         $task = Task::create($validatedData);
 
-        return $task->toJson();
+        return response()->json($task, 201);
     }
 
     public function markAsCompleated(Task $task)
