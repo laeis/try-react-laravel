@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Database\QueryException;
 
 class TaskController extends Controller
 {
@@ -23,15 +24,18 @@ class TaskController extends Controller
     public function markAsCompleated(Task $task)
     {
         $status = 200;
-        $message = 'Task updated!';
+        $response['message'] = 'Task updated!';
         try {
             $task->is_compleated = true;
             $task->update();
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             $status  = 500;
-            $message = $e->getMessage();
+            $response['message'] = 'Error updating task, wrong query or database structure';
+        } catch (\Exception $e) {
+            $status  = 500;
+            $response['message'] = 'Something went wrong. Server error';
         }
         
-        return response()->json($message, $status);
+        return response()->json($response, $status);
     }
 }
